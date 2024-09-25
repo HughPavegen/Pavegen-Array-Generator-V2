@@ -77,9 +77,20 @@
               console.log('Canvas created');
               const dataUrl = canvas.toDataURL();
               console.log('Data URL created');
-              // Include width and length in the message
-              window.ipcRenderer.send('save-screenshot', { dataUrl, width, length });
-              console.log('Data URL and dimensions sent to main process');
+              
+              // Check if we are in Electron
+              if (window.ipcRenderer) {
+                // Running inside Electron, send the message to the main process
+                window.ipcRenderer.send('save-screenshot', { dataUrl, width, length });
+                console.log('Data URL and dimensions sent to main process');
+              } else {
+                // Running inside a browser, download the image directly
+                const link = document.createElement('a');
+                link.href = dataUrl;
+                link.download = `configuration_${width}x${length}.png`;
+                link.click();
+                console.log('Image downloaded in browser');
+              }
             }).catch(error => {
               console.error('Failed to create canvas', error);
             });
@@ -91,7 +102,7 @@
         console.error('Download button not found');
       }
     });
-    </script>
+</script>
  
   
 </body>
