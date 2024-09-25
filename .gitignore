@@ -1,0 +1,13 @@
+node_modules/
+dist
+Apple Developer Certificate.cer
+Application Certificate.cer
+build.js
+Certificates.p12
+CertificateSigningRequest.certSigningRequest
+electron-builder-config.js
+entitlements.plist
+Info.plist
+scripts/notarize.js
+.env
+.DS_Store

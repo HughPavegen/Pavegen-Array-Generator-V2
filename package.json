@@ -1,0 +1,45 @@
+{
+  "name": "pavegen-array-generator",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "electron": "^29.1.5",
+    "electron-builder": "^24.13.3"
+  },
+  "dependencies": {
+    "html2canvas": "^1.4.1"
+  },
+  "build": {
+    "appId": "your.app.id",
+    "directories": {
+      "buildResources": "assets"
+    },
+    "files": [
+      "**/*",
+      "assets/**/*"
+    ],
+    "mac": {
+      "icon": "assets/App_Icon_Folder/icon.icns",
+      "category": "your.app.category.type"
+    },
+    "win": {
+      "target": "NSIS",
+      "icon": "assets/App_Icon_Folder/icon.ico"
+    },
+    "linux": {
+      "target": [
+        "AppImage",
+        "deb"
+      ],
+      "icon": "assets/App_Icon_Folder"
+    }
+  }
+}
