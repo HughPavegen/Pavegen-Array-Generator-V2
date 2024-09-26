@@ -39,7 +39,7 @@ ipcMain.on('save-screenshot', (event, { dataUrl, width, length }) => {
     dialog.showSaveDialog({
         title: 'Save Screenshot',
         // Use width and length to generate the default file name
-        defaultPath: path.join(app.getPath('desktop'), `${width} tiles wide ${length} tiles long V3.5 Pavegen array.png`),
+        defaultPath: path.join(app.getPath('desktop'), `${width} tiles wide ${length} tiles long Pavegen array.png`),
         buttonLabel: 'Save',
         filters: [
             { name: 'Images', extensions: ['png'] }
