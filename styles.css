@@ -1,23 +1,6 @@
-#arrayVisualization {
-  position: relative;
-}
-
-.tile {
-  position: absolute;
-  transition: transform 0.2s; /* Smooth transformation */
-}
-
-.flip-horizontal {
-  transform: scaleX(-1);
-}
-
-.flip-vertical {
-  transform: scaleY(-1);
-}
-
 body {
   background-color: #131B20;
-  color: white; /* Text color */
+  color: white;
   margin: 0;
   padding: 20px;
   height: 100vh;
@@ -25,118 +8,146 @@ body {
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
-  font-family: 'VisbyCF', sans-serif; /* This sets 'VisbyCF' as the default font for the body */
-  font-weight: normal; /* This will use the VisbyCF-Bold.ttf as the default */
-  color: white; /* Sets the default text color to white */
+  font-family: 'VisbyCF', sans-serif;
+  font-weight: normal;
   background-image: url('assets/Gradient-background.png');
-  background-size: cover; /* This will cover the entire page without repeating */
-  background-position: center; /* This centers the background image */
+  background-size: cover;
+  background-position: center;
 }
 
-#gridContainer { 
-  border: 5px solid lightgrey; /* Border around the entire grid */
+#frameContainer {
+  display: grid;
+  grid-template-columns: auto 1fr auto; /* 3 columns: fixed (auto), flexible (1fr), fixed (auto) */
+  grid-template-rows: auto 1fr auto;    /* 3 rows: fixed (auto), flexible (1fr), fixed (auto) */
+  width: fit-content;
+  height: fit-content;
+  position: relative;
+}
+
+/* Frame divs: fill with grey */
+.frame {
+  background-color: grey;
+}
+
+/* Frame corner divs */
+.top-left, .top-right, .bottom-left, .bottom-right {
+  width: 100px;
+  height: 100px;
+}
+
+/* Top and bottom frame divs */
+.top, .bottom {
+  height: 100px;
+}
+
+/* Left and right frame divs */
+.left, .right {
+  width: 100px;
+}
+
+/* Central div containing the grid */
+.center {
+  background-color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#gridContainer {
+  border: 5px solid lightgrey;
   display: inline-block;
-  flex-wrap: wrap; /* This will ensure that the rows are treated as a continuous sequence */
+  flex-wrap: wrap;
   justify-content: flex-start;
   align-items: flex-start;
-  margin: -2.5px; /* Adjust for the border's visual effect if needed */
-  margin-top: 15px;
+  padding: 10px;
 }
 
-#gridContainer > div {
-  flex: 0 0 100%; /* This ensures that the div elements (rows) take the full width of the gridContainer */
-  display: inline-block;
-  justify-content: flex-start;
-}
-
+/* Style for individual tile images */
 #gridContainer img {
   display: block;
-  margin: 0; /* Remove margin to make the tiles connect seamlessly */
-  padding: 0; /* Remove padding to make the tiles connect seamlessly */
-  /* Other img styles */
+  margin: 0;
+  padding: 0;
 }
 
+/* Styling for the sliders */
 .slider-container {
   display: flex;
-  justify-content: space-between; /* Adjust the space between slider groups */
+  justify-content: space-between;
 }
 
 .slider-group {
   display: flex;
-  flex-direction: column; /* Stack the inputs vertically */
-  align-items: left; /* Align the items to the left */
-  padding: 10px; /* Add some space around each group */
+  flex-direction: column;
+  align-items: left;
+  padding: 10px;
 }
 
 .slider-group label {
-  margin-top: 10px; /* Add some space above the label */
+  margin-top: 10px;
   font-weight: bold;
 }
 
-/* Styling the length and width sliders */
 #lengthSlider,
 #widthSlider {
   margin-bottom: 10px;
-  -webkit-appearance: none; /* Remove default WebKit styling */
+  -webkit-appearance: none;
   width: 100%;
-  height: 8px; /* Height of the slider track */
-  background: rgba(0, 245, 150, 0.5); /* 50% opacity for the track */
+  height: 8px;
+  background: rgba(0, 245, 150, 0.5);
   border-radius: 5px;
   outline: none;
   opacity: 0.9;
   transition: opacity 0.2s ease-in-out;
 }
 
-/* Hover effect for slider */
 #lengthSlider:hover,
 #widthSlider:hover {
   opacity: 1;
 }
 
-/* Track and thumb styling for WebKit browsers (Chrome, Safari, Edge) */
+/* Thumb styles for WebKit browsers */
 #lengthSlider::-webkit-slider-thumb,
 #widthSlider::-webkit-slider-thumb {
   -webkit-appearance: none;
-  appearance: none;
-  width: 18px; /* Slightly smaller thumb size */
+  width: 18px;
   height: 18px;
-  background: #00f596; /* Thumb color */
-  border-radius: 40%; /* Slightly decreased border-radius */
+  background: #00f596;
+  border-radius: 40%;
   cursor: pointer;
-  margin-top: -5px; /* Vertically center the thumb */
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3); /* Drop shadow for the thumb */
+  margin-top: -5px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
 }
 
 #lengthSlider::-webkit-slider-runnable-track,
 #widthSlider::-webkit-slider-runnable-track {
-  background: rgba(0, 245, 150, 0.5); /* 50% opacity for the track */
+  background: rgba(0, 245, 150, 0.5);
   height: 8px;
   border-radius: 5px;
 }
 
-/* Track and thumb styling for Firefox */
+/* Thumb and track styles for Firefox */
 #lengthSlider::-moz-range-thumb,
 #widthSlider::-moz-range-thumb {
   width: 18px;
   height: 18px;
-  background: #00f596; /* Thumb color */
-  border-radius: 40%; /* Slightly decreased border-radius */
+  background: #00f596;
+  border-radius: 40%;
   cursor: pointer;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3); /* Drop shadow for the thumb */
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
 }
 
 #lengthSlider::-moz-range-track,
 #widthSlider::-moz-range-track {
-  background: rgba(0, 245, 150, 0.5); /* 50% opacity for the track */
+  background: rgba(0, 245, 150, 0.5);
   height: 8px;
   border-radius: 5px;
 }
 
 #lengthInput,
 #widthInput {
-  margin-bottom: 10px; /* Adds separation between sliders and the grid */
-  background-color: #00f59765; /* Dark grey background */
-  color: white; /* Text color */
+  margin-bottom: 10px;
+  background-color: #00f59765;
+  color: white;
   border: 1px solid #00f596;
   border-radius: 5px;
 }
@@ -145,57 +156,43 @@ body {
   width: 100%;
   border-collapse: collapse;
   margin-top: 15px;
-  margin-bottom: 20px; /* Adds space between the table and the grid */
+  margin-bottom: 20px;
 }
 
 .properties-table th, .properties-table td {
   border: 1px solid white;
   text-align: left;
   padding: 8px;
-  color: white; /* Ensures text is white */
+  color: white;
 }
 
 .properties-table th {
   background-color: #131B20;
 }
 
-@font-face {
-  font-family: 'VisbyCF';
-  src: url('TTF/VisbyCF-Bold.ttf') format('truetype');
-  font-weight: bold;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'VisbyCF';
-  src: url('TTF/VisbyCF-Regular.ttf') format('truetype');
-  font-weight: normal;
-  font-style: normal;
-}
-
 #downloadButton {
-  background-color: #00f596; /* Button color */
-  color: #131B20; /* Text color */
-  padding: 10px 20px; /* Button padding */
-  border: none; /* No border */
-  border-radius: 5px; /* Rounded edges */
-  cursor: pointer; /* Cursor to indicate it's clickable */
-  outline: none; /* Remove focus outline */
-  margin-bottom: 10px; /* Space below the button */
+  background-color: #00f596;
+  color: #131B20;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  outline: none;
+  margin-bottom: 10px;
   margin-top: 10px;
 }
 
 #downloadButton:hover {
-  background-color: #00f59791; /* Slightly lighter color on hover */
+  background-color: #00f59791;
 }
 
 #logoContainer {
-  text-align: center; /* Center the logo horizontally */
-  padding: 20px; /* Add some space around the logo */
+  text-align: center;
+  padding: 20px;
 }
 
 #logo {
-  width: 80px; /* Set the width of your logo */
-  height: auto; /* Keep the aspect ratio */
+  width: 80px;
+  height: auto;
   margin-left: -16px;
 }

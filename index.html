@@ -1,11 +1,9 @@
-
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html>
 <head>
   <title>Pavegen Array Configurator - V1</title>
   <link rel="stylesheet" type="text/css" href="styles.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.3.2/html2canvas.min.js"></script>
-<!--  -->
 </head>
 <body>
 
@@ -13,22 +11,28 @@
     <img id="logo" src="assets/Pavegen-logo.png" alt="Logo">
   </div>
 
- <button id="downloadButton">Download Configuration</button>
+  <button id="downloadButton">Download Configuration</button>
+
+  <!-- Checkbox for toggling ramps -->
+  <div class="toggle-ramps">
+    <label for="rampsCheckbox">Ramps</label>
+    <input type="checkbox" id="rampsCheckbox" checked>
+  </div>
  
-<!-- Adding slide container -->
- <div class="slider-container">
-  <div class="slider-group">
-    <label for="lengthInput">Tiles long</label>
-    <input type="range" id="lengthSlider" min="2" max="24" value="10">
-    <input type="text" id="lengthInput" value="10">
-  </div>
+  <!-- Adding slide container -->
+  <div class="slider-container">
+    <div class="slider-group">
+      <label for="lengthInput">Tiles long</label>
+      <input type="range" id="lengthSlider" min="2" max="24" value="10">
+      <input type="text" id="lengthInput" value="10">
+    </div>
   
-  <div class="slider-group">
-    <label for="widthInput">Tiles wide</label>
-    <input type="range" id="widthSlider" min="2" max="10" value="5">
-    <input type="text" id="widthInput" value="5">
+    <div class="slider-group">
+      <label for="widthInput">Tiles wide</label>
+      <input type="range" id="widthSlider" min="2" max="10" value="5">
+      <input type="text" id="widthInput" value="5">
+    </div>
   </div>
-</div>
   
   <div class="properties-table">
     <table>
@@ -55,57 +59,53 @@
     </table>
   </div>
 
-  <div id="gridContainer"></div>
+  <!-- The frame container with the central grid and surrounding divs -->
+  <div id="frameContainer">
+    <!-- Top row -->
+    <div class="frame top-left"></div>
+    <div class="frame top"></div>
+    <div class="frame top-right"></div>
+
+    <!-- Middle row -->
+    <div class="frame left"></div>
+    <div id="gridContainer" class="center">
+      <!-- Array of tiles will go here -->
+    </div>
+    <div class="frame right"></div>
+
+    <!-- Bottom row -->
+    <div class="frame bottom-left"></div>
+    <div class="frame bottom"></div>
+    <div class="frame bottom-right"></div>
+  </div>
 
   <script src="renderer.js"></script>
   
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       console.log('Document loaded');
-      const downloadButton = document.getElementById('downloadButton');
-    
-      if (downloadButton) {
-        console.log('Download button found');
-        downloadButton.addEventListener('click', () => {
-          console.log('Download button clicked');
-          const gridContainer = document.getElementById('gridContainer');
-          const width = document.getElementById('widthInput').value; // Get width from input
-          const length = document.getElementById('lengthInput').value; // Get length from input
-          if (gridContainer) {
-            console.log('Grid container found');
-            html2canvas(gridContainer).then(canvas => {
-              console.log('Canvas created');
-              const dataUrl = canvas.toDataURL();
-              console.log('Data URL created');
-              
-              // Check if we are in Electron
-              if (window.ipcRenderer) {
-                // Running inside Electron, send the message to the main process
-                window.ipcRenderer.send('save-screenshot', { dataUrl, width, length });
-                console.log('Data URL and dimensions sent to main process');
-              } else {
-                // Running inside a browser, download the image directly
-                const link = document.createElement('a');
-                link.href = dataUrl;
-                link.download = `configuration_${width}x${length}.png`;
-                link.click();
-                console.log('Image downloaded in browser');
-              }
-            }).catch(error => {
-              console.error('Failed to create canvas', error);
-            });
-          } else {
-            console.error('Grid container not found');
-          }
-        });
-      } else {
-        console.error('Download button not found');
-      }
+
+      const rampsCheckbox = document.getElementById('rampsCheckbox');
+      const frameDivs = document.querySelectorAll('.frame');
+
+      rampsCheckbox.addEventListener('change', () => {
+        if (rampsCheckbox.checked) {
+          // Expand the frame divs when checked
+          frameDivs.forEach(div => {
+            div.style.width = '';
+            div.style.height = '';
+          });
+        } else {
+          // Collapse the frame divs when unchecked
+          frameDivs.forEach(div => {
+            div.style.width = '0';
+            div.style.height = '0';
+          });
+        }
+      });
+
+      // Other existing code for download and slider functionality...
     });
-</script>
- 
-  
-</body>
+  </script>
 </body>
 </html>
-
