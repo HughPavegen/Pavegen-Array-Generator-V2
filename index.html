@@ -68,8 +68,12 @@
 
     <!-- Middle row -->
     <div class="frame left"></div>
-    <div id="gridContainer" class="center">
-      <!-- Array of tiles will go here -->
+    <div class="outer-container">
+      <div class="inner-container">
+        <div id="gridContainer" class="center">
+          <!-- Array of tiles will go here -->
+        </div>
+      </div>
     </div>
     <div class="frame right"></div>
 
@@ -87,25 +91,57 @@
 
       const rampsCheckbox = document.getElementById('rampsCheckbox');
       const frameDivs = document.querySelectorAll('.frame');
+      const downloadButton = document.getElementById('downloadButton');
+      const frameContainer = document.getElementById('frameContainer'); // Capture the whole frameContainer
 
+      // Ramps toggle functionality
       rampsCheckbox.addEventListener('change', () => {
         if (rampsCheckbox.checked) {
-          // Expand the frame divs when checked
           frameDivs.forEach(div => {
             div.style.width = '';
             div.style.height = '';
+            div.style.display = 'block';  // Ensure div is visible
           });
         } else {
-          // Collapse the frame divs when unchecked
           frameDivs.forEach(div => {
             div.style.width = '0';
             div.style.height = '0';
+            div.style.display = 'none';  // Ensure div is hidden
           });
         }
       });
 
-      // Other existing code for download and slider functionality...
+      // Capture the entire frameContainer when downloading
+      downloadButton.addEventListener('click', () => {
+        // Temporarily make sure all frames are visible
+        frameDivs.forEach(div => {
+          div.style.display = 'block'; // Ensure all elements are visible for the screenshot
+        });
+
+        // Give time for the UI to render any changes
+        setTimeout(() => {
+          html2canvas(frameContainer, {
+            allowTaint: true,  // This helps in some cases where cross-origin issues occur
+          }).then((canvas) => {
+            const dataUrl = canvas.toDataURL('image/png');
+
+            // Create an anchor element to download the image
+            const link = document.createElement('a');
+            link.href = dataUrl;
+            link.download = 'Pavegen_Array_Configuration.png'; // Set the file name
+            link.click();
+
+            // Reset the visibility of frames after screenshot
+            if (!rampsCheckbox.checked) {
+              frameDivs.forEach(div => div.style.display = 'none');
+            }
+          }).catch((error) => {
+            console.error('Error capturing screenshot:', error);
+          });
+        }, 500); // Short delay to allow UI to update before taking the screenshot
+      });
     });
   </script>
+
 </body>
 </html>

@@ -69,13 +69,21 @@ function updateGrid() {
 
 // The updateTable function now accepts length and width as parameters
 function updateTable(length, width) {
+  const tilesLength = 0.500
+  const tilesWidth = 0.43258
+  const frameWidth = 0.0505;
   const tilesLong = length / 2;
   const tilesWide = width;
-  const lengthM = length * (0.5 / 2) + 0.05; // Assuming each tile length unit is 0.5 meters
-  const widthM = width * 0.433 + 0.05; // Assuming each tile width unit is 1 meter
+  const lengthM = (tilesLong * tilesLength) + (2*frameWidth); // Assuming each tile length unit is 0.5 meters
+  const widthM = (tilesWide * tilesWidth) + (2*frameWidth); // Assuming each tile width unit is 1 meter
   const areaM2 = lengthM * widthM; // Area calculation
-  const numGenerators = (Math.floor((tilesWide - 1) / 2)) * (Math.floor(tilesLong - 0.5)) +
-                        (Math.floor((tilesWide) / 2)) * (Math.floor(tilesLong));
+  const GeneratorsOnOddRows = (Math.floor(tilesLong))
+  const GeneratorsOnEvenRows = (Math.floor(tilesLong-0.5))
+  const NumberOfOddRows = (Math.floor((tilesWide)/2))
+  const NumberOfEvenRows = (Math.floor((tilesWide-1)/2))
+  const numGenerators = ((GeneratorsOnOddRows*NumberOfOddRows)+(GeneratorsOnEvenRows*NumberOfEvenRows))
+  /*const numGenerators = (Math.floor((tilesWide - 1) / 2)) * (Math.floor(tilesLong - 0.5)) +
+                        (Math.floor((tilesWide) / 2)) * (Math.floor(tilesLong)); */
   const fullTiles = tilesWide * ((tilesLong * 2) - 1);
   const halfTiles = tilesWide * 2;
 
