@@ -1,39 +1,42 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Pavegen Array Configurator - V1</title>
-  <link rel="stylesheet" type="text/css" href="styles.css">
+  <link rel="stylesheet" href="styles.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.3.2/html2canvas.min.js"></script>
 </head>
 <body>
-
   <div id="logoContainer">
     <img id="logo" src="assets/Pavegen-logo.png" alt="Logo">
   </div>
 
   <button id="downloadButton">Download Configuration</button>
 
-  <!-- Checkbox for toggling ramps -->
-  <div class="toggle-ramps">
+  <!-- Ramps toggle and size input -->
+  <div class="ramp-options">
     <label for="rampsCheckbox">Ramps</label>
-    <input type="checkbox" id="rampsCheckbox" checked>
+    <input type="checkbox" id="rampsCheckbox"> <!-- Ramps are unchecked by default -->
+    <input type="number" id="rampSizeInput" class="hidden" min="0" step="0.1" value="1">
+    <label for="rampSizeInput" id="rampSizeLabel">(m)</label>
   </div>
- 
-  <!-- Adding slide container -->
+
+  <!-- Adding slider container -->
   <div class="slider-container">
     <div class="slider-group">
       <label for="lengthInput">Tiles long</label>
       <input type="range" id="lengthSlider" min="2" max="24" value="10">
       <input type="text" id="lengthInput" value="10">
     </div>
-  
+
     <div class="slider-group">
       <label for="widthInput">Tiles wide</label>
       <input type="range" id="widthSlider" min="2" max="10" value="5">
       <input type="text" id="widthInput" value="5">
     </div>
   </div>
-  
+
   <div class="properties-table">
     <table>
       <tr>
@@ -59,15 +62,22 @@
     </table>
   </div>
 
-  <!-- The frame container with the central grid and surrounding divs -->
   <div id="frameContainer">
     <!-- Top row -->
-    <div class="frame top-left"></div>
-    <div class="frame top"></div>
-    <div class="frame top-right"></div>
-
+    <div class="frame top-left">
+      <svg class="triangle-svg" viewBox="0 0 100 100">
+        <polygon points="100,100 100,0 0,100" fill="grey" stroke="black" stroke-width="1"></polygon>
+      </svg>
+    </div>
+    <div class="frame top" style="background-color: grey;"></div>
+    <div class="frame top-right">
+      <svg class="triangle-svg" viewBox="0 0 100 100">
+        <polygon points="0,0 0,100 100,100" fill="grey" stroke="black" stroke-width="1"></polygon>
+      </svg>
+    </div>
+  
     <!-- Middle row -->
-    <div class="frame left"></div>
+    <div class="frame left" style="background-color: grey;"></div>
     <div class="outer-container">
       <div class="inner-container">
         <div id="gridContainer" class="center">
@@ -75,24 +85,70 @@
         </div>
       </div>
     </div>
-    <div class="frame right"></div>
-
+    <div class="frame right" style="background-color: grey;"></div>
+  
     <!-- Bottom row -->
-    <div class="frame bottom-left"></div>
-    <div class="frame bottom"></div>
-    <div class="frame bottom-right"></div>
+    <div class="frame bottom-left">
+      <svg class="triangle-svg" viewBox="0 0 100 100">
+        <polygon points="100,0 100,100 0,0" fill="grey" stroke="black" stroke-width="1"></polygon>
+      </svg>
+    </div>
+    <div class="frame bottom" style="background-color: grey;"></div>
+    <div class="frame bottom-right">
+      <svg class="triangle-svg" viewBox="0 0 100 100">
+        <polygon points="0,0 0,100 100,0" fill="grey" stroke="black" stroke-width="1"></polygon>
+      </svg>
+    </div>
   </div>
 
   <script src="renderer.js"></script>
-  
+
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      console.log('Document loaded');
-
       const rampsCheckbox = document.getElementById('rampsCheckbox');
+      const rampSizeLabel = document.getElementById('rampSizeLabel');
+      const rampSizeInput = document.getElementById('rampSizeInput');
       const frameDivs = document.querySelectorAll('.frame');
       const downloadButton = document.getElementById('downloadButton');
-      const frameContainer = document.getElementById('frameContainer'); // Capture the whole frameContainer
+      const frameContainer = document.getElementById('frameContainer');
+
+      // Initially hide the ramps as the checkbox is unchecked
+      frameDivs.forEach(div => {
+        div.style.width = '0';
+        div.style.height = '0';
+        div.style.display = 'none';  // Hide divs initially
+      });
+      rampSizeInput.classList.add('hidden');
+      rampSizeLabel.classList.add('hidden');
+
+      const updateRamps = () => {
+        const rampSizeM = parseFloat(rampSizeInput.value);
+        const rampWidthPx = (rampSizeM / 0.25) * 50;
+        const rampHeightPx = (rampSizeM / 0.43) * 86;
+
+        document.querySelectorAll('.triangle-svg').forEach(svg => {
+          svg.style.width = `${rampWidthPx}px`;
+          svg.style.height = `${rampHeightPx}px`;
+        });
+
+        document.querySelector('.top-left').style.width = `${rampWidthPx}px`;
+        document.querySelector('.top-left').style.height = `${rampHeightPx}px`;
+
+        document.querySelector('.top-right').style.width = `${rampWidthPx}px`;
+        document.querySelector('.top-right').style.height = `${rampHeightPx}px`;
+
+        document.querySelector('.bottom-left').style.width = `${rampWidthPx}px`;
+        document.querySelector('.bottom-left').style.height = `${rampHeightPx}px`;
+
+        document.querySelector('.bottom-right').style.width = `${rampWidthPx}px`;
+        document.querySelector('.bottom-right').style.height = `${rampHeightPx}px`;
+      };
+
+      // Initialize ramps with default size
+      updateRamps();
+
+      // Update ramps when the ramp size changes
+      rampSizeInput.addEventListener('input', updateRamps);
 
       // Ramps toggle functionality
       rampsCheckbox.addEventListener('change', () => {
@@ -102,46 +158,43 @@
             div.style.height = '';
             div.style.display = 'block';  // Ensure div is visible
           });
+          rampSizeInput.classList.remove('hidden');
+          rampSizeLabel.classList.remove('hidden');
         } else {
           frameDivs.forEach(div => {
             div.style.width = '0';
             div.style.height = '0';
             div.style.display = 'none';  // Ensure div is hidden
           });
+          rampSizeInput.classList.add('hidden');
+          rampSizeLabel.classList.add('hidden');
         }
       });
 
       // Capture the entire frameContainer when downloading
       downloadButton.addEventListener('click', () => {
-        // Temporarily make sure all frames are visible
         frameDivs.forEach(div => {
           div.style.display = 'block'; // Ensure all elements are visible for the screenshot
         });
 
-        // Give time for the UI to render any changes
         setTimeout(() => {
-          html2canvas(frameContainer, {
-            allowTaint: true,  // This helps in some cases where cross-origin issues occur
-          }).then((canvas) => {
+          html2canvas(frameContainer).then((canvas) => {
             const dataUrl = canvas.toDataURL('image/png');
 
-            // Create an anchor element to download the image
             const link = document.createElement('a');
             link.href = dataUrl;
-            link.download = 'Pavegen_Array_Configuration.png'; // Set the file name
+            link.download = 'Pavegen_Array_Configuration.png';
             link.click();
 
-            // Reset the visibility of frames after screenshot
             if (!rampsCheckbox.checked) {
               frameDivs.forEach(div => div.style.display = 'none');
             }
           }).catch((error) => {
             console.error('Error capturing screenshot:', error);
           });
-        }, 500); // Short delay to allow UI to update before taking the screenshot
+        }, 500);
       });
     });
   </script>
-
 </body>
 </html>

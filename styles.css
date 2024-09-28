@@ -25,59 +25,41 @@ body {
 }
 
 .frame {
-  background-color: grey;
+  background-color: transparent; /* Ensure the frame div itself is transparent */
+  border: none; /* Remove any borders from the frame divs */
 }
 
-.top-left, .top-right, .bottom-left, .bottom-right {
+.triangle-svg {
+  display: block;
   width: 100px;
   height: 100px;
 }
 
-.top, .bottom {
-  height: 100px;
+.triangle-svg polygon {
+  fill: grey; /* Only the polygon (triangle) is filled */
+  stroke: black; /* Stroke only for the triangle */
+  stroke-width: 1;
 }
 
-.left, .right {
-  width: 100px;
-}
-
+/* Central div containing the grid */
 .center {
   background-color: rgb(22, 22, 22);
   display: flex;
   align-items: center;
   justify-content: center;
+  z-index: 10; /* Ensure this is above the ramps */
 }
 
-/* Outer dark grey border */
-.outer-container {
-  padding: 5px;
-  background-color: #202020; /* Outermost dark grey background */
-  display: inline-block;
-  box-sizing: border-box;
-}
-
-/* Middle light grey border */
-.inner-container {
-  padding: 5px; /* Inner padding for the light grey border */
-  border: 5px solid lightgrey;
-  background-color: #1a1a1a; /* Dark grey background inside the light grey border */
-  box-sizing: border-box;
-}
-
-/* Style for individual tile images */
 #gridContainer {
-  display: block;
-  margin: 0;
-  padding: 0;
+  padding: 5px;
+  border: 5px solid lightgrey;
+  background-color: #1a1a1a;
+  display: inline-block;
+  justify-content: flex-start;
+  align-items: flex-start;
 }
 
-#gridContainer img {
-  display: block;
-  margin: 0;
-  padding: 0;
-}
-
-/* Styling for the sliders */
+/* Slider styling */
 .slider-container {
   display: flex;
   justify-content: space-between;
@@ -165,7 +147,8 @@ body {
   margin-bottom: 20px;
 }
 
-.properties-table th, .properties-table td {
+.properties-table th,
+.properties-table td {
   border: 1px solid white;
   text-align: left;
   padding: 8px;
@@ -201,4 +184,40 @@ body {
   width: 80px;
   height: auto;
   margin-left: -16px;
+}
+
+/* Make the ramp size input box 1/5th of the width */
+#rampSizeInput {
+  margin-bottom: 0px;
+  background-color: #00f59765;
+  color: white;
+  border: 1px solid #00f596;
+  border-radius: 5px;
+  width: 15%; /* Set the width to 1/5th */
+  display: inline-block;
+}
+
+/* Maintain hidden functionality using the 'hidden' class */
+.hidden {
+  display: none;
+}
+
+/* Additional styles for ramp options */
+.ramp-options {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Adjust spacing between the elements */
+}
+
+.hidden {
+  display: none;
+}
+
+.outer-container {
+  padding: 5px; /* Add 1px padding */
+  background-color: #1a1a1a; /* Dark grey background */
+}
+
+.inner-container {
+  background-color: transparent; /* Keep the inner container transparent */
 }

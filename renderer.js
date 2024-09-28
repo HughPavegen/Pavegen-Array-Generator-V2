@@ -10,39 +10,39 @@ updateGrid();
 
 // Event listeners for the sliders
 widthSlider.oninput = () => {
-  let widthValue = Math.max(2, widthSlider.value); // Ensure width is at least 2
-  widthSlider.value = widthValue; // Correct the slider position if needed
+  let widthValue = Math.max(2, widthSlider.value);
+  widthSlider.value = widthValue;
   widthInput.value = widthValue;
   updateGrid();
 };
 
 lengthSlider.oninput = () => {
-  let lengthValue = Math.max(2, lengthSlider.value); // Ensure length is at least 1
-  lengthSlider.value = lengthValue; // Correct the slider position if needed
-  lengthInput.value = (lengthValue * 0.5).toFixed(1); // Convert to increments of 0.5
+  let lengthValue = Math.max(2, lengthSlider.value);
+  lengthSlider.value = lengthValue;
+  lengthInput.value = (lengthValue * 0.5).toFixed(1);
   updateGrid();
 };
 
 // Event listeners for the text inputs
 widthInput.onchange = () => {
-  let widthValue = Math.max(2, widthInput.value); // Ensure width is at least 2
-  widthInput.value = widthValue; // Correct the input value if needed
+  let widthValue = Math.max(2, widthInput.value);
+  widthInput.value = widthValue;
   widthSlider.value = widthValue;
   updateGrid();
 };
 
 lengthInput.onchange = () => {
-  let lengthValue = Math.max(1, parseFloat(lengthInput.value)); // Ensure length is at least 0.5
-  lengthValue = (Math.round(lengthValue * 2) / 2).toFixed(1); // Round to nearest 0.5
-  lengthInput.value = lengthValue; // Set the corrected value back to the input
-  lengthSlider.value = lengthValue * 2; // Adjust the slider value
+  let lengthValue = Math.max(1, parseFloat(lengthInput.value));
+  lengthValue = (Math.round(lengthValue * 2) / 2).toFixed(1);
+  lengthInput.value = lengthValue;
+  lengthSlider.value = lengthValue * 2;
   updateGrid();
 };
 
 // Function to update the grid
 function updateGrid() {
-  const width = parseInt(widthInput.value, 10); // Parse the width as an integer
-  const length = parseFloat(lengthInput.value) * 2; // Convert length input to tile units, rounding to nearest 0.5
+  const width = parseInt(widthInput.value, 10);
+  const length = parseFloat(lengthInput.value) * 2;
 
   gridContainer.innerHTML = ''; // Clear existing grid
   
@@ -55,7 +55,6 @@ function updateGrid() {
       img.src = './assets/half-tile-instance.png';
       img.width = 50; // Width of a single tile
       img.height = 86; // Height of a single tile
-      // Apply transformations
       img.style.transform = `scaleX(${x % 2 === 0 ? 1 : -1}) scaleY(${y % 2 === 0 ? 1 : -1})`;
       img.style.objectFit = 'cover';
       row.appendChild(img);
@@ -63,27 +62,24 @@ function updateGrid() {
     gridContainer.appendChild(row);
   }
 
-  // Call updateTable and pass the current length and width
-  updateTable(length, width);
+  updateTable(length, width); // Call updateTable
 }
 
-// The updateTable function now accepts length and width as parameters
+// The updateTable function
 function updateTable(length, width) {
-  const tilesLength = 0.500
-  const tilesWidth = 0.43258
+  const tilesLength = 0.500;
+  const tilesWidth = 0.43258;
   const frameWidth = 0.0505;
   const tilesLong = length / 2;
   const tilesWide = width;
-  const lengthM = (tilesLong * tilesLength) + (2*frameWidth); // Assuming each tile length unit is 0.5 meters
-  const widthM = (tilesWide * tilesWidth) + (2*frameWidth); // Assuming each tile width unit is 1 meter
-  const areaM2 = lengthM * widthM; // Area calculation
-  const GeneratorsOnOddRows = (Math.floor(tilesLong))
-  const GeneratorsOnEvenRows = (Math.floor(tilesLong-0.5))
-  const NumberOfOddRows = (Math.floor((tilesWide)/2))
-  const NumberOfEvenRows = (Math.floor((tilesWide-1)/2))
-  const numGenerators = ((GeneratorsOnOddRows*NumberOfOddRows)+(GeneratorsOnEvenRows*NumberOfEvenRows))
-  /*const numGenerators = (Math.floor((tilesWide - 1) / 2)) * (Math.floor(tilesLong - 0.5)) +
-                        (Math.floor((tilesWide) / 2)) * (Math.floor(tilesLong)); */
+  const lengthM = (tilesLong * tilesLength) + (2 * frameWidth);
+  const widthM = (tilesWide * tilesWidth) + (2 * frameWidth);
+  const areaM2 = lengthM * widthM;
+  const GeneratorsOnOddRows = Math.floor(tilesLong);
+  const GeneratorsOnEvenRows = Math.floor(tilesLong - 0.5);
+  const NumberOfOddRows = Math.floor((tilesWide) / 2);
+  const NumberOfEvenRows = Math.floor((tilesWide - 1) / 2);
+  const numGenerators = ((GeneratorsOnOddRows * NumberOfOddRows) + (GeneratorsOnEvenRows * NumberOfEvenRows));
   const fullTiles = tilesWide * ((tilesLong * 2) - 1);
   const halfTiles = tilesWide * 2;
 
@@ -97,20 +93,73 @@ function updateTable(length, width) {
   document.getElementById('halfTiles').innerText = halfTiles;
 }
 
+// Ramp-related functionality
+document.addEventListener('DOMContentLoaded', () => {
+  const rampsCheckbox = document.getElementById('rampsCheckbox');
+  const rampSizeLabel = document.getElementById('rampSizeLabel');
+  const rampSizeInput = document.getElementById('rampSizeInput');
+  const frameDivs = document.querySelectorAll('.frame');
+
+  const updateRamps = () => {
+    const rampSizeM = parseFloat(rampSizeInput.value);
+    const rampWidthPx = (rampSizeM / 0.25) * 50;
+    const rampHeightPx = (rampSizeM / 0.43) * 86;
+
+    document.querySelectorAll('.triangle-svg').forEach(svg => {
+      svg.style.width = `${rampWidthPx}px`;
+      svg.style.height = `${rampHeightPx}px`;
+    });
+
+    document.querySelector('.top-left').style.width = `${rampWidthPx}px`;
+    document.querySelector('.top-left').style.height = `${rampHeightPx}px`;
+
+    document.querySelector('.top-right').style.width = `${rampWidthPx}px`;
+    document.querySelector('.top-right').style.height = `${rampHeightPx}px`;
+
+    document.querySelector('.bottom-left').style.width = `${rampWidthPx}px`;
+    document.querySelector('.bottom-left').style.height = `${rampHeightPx}px`;
+
+    document.querySelector('.bottom-right').style.width = `${rampWidthPx}px`;
+    document.querySelector('.bottom-right').style.height = `${rampHeightPx}px`;
+  };
+
+  updateRamps(); // Initialize ramps with default size
+
+  rampSizeInput.addEventListener('input', updateRamps); // Update ramps on size change
+
+  // Ramps toggle functionality
+  rampsCheckbox.addEventListener('change', () => {
+    if (rampsCheckbox.checked) {
+      frameDivs.forEach(div => {
+        div.style.width = '';
+        div.style.height = '';
+        div.style.display = 'block';
+      });
+      rampSizeInput.classList.remove('hidden');
+      rampSizeLabel.classList.remove('hidden');
+    } else {
+      frameDivs.forEach(div => {
+        div.style.width = '0';
+        div.style.height = '0';
+        div.style.display = 'none';
+      });
+      rampSizeInput.classList.add('hidden');
+      rampSizeLabel.classList.add('hidden');
+    }
+  });
+});
+
+// Download the screenshot functionality
 downloadButton.addEventListener('click', () => {
-  // Get the current values of the width and length
   const width = widthInput.value;
   const length = lengthInput.value;
 
-  // Use html2canvas to capture the gridContainer
   html2canvas(gridContainer).then((canvas) => {
     const dataUrl = canvas.toDataURL('image/png');
-    
-    // Create an anchor element to download the image with a dynamic filename
+
     const link = document.createElement('a');
     link.href = dataUrl;
-    // Set the filename to include the width and length
-    link.download = `Array_${width}_tiles_wide_x_${length}_tile_long.png`; 
+    link.download = `Array_${width}_tiles_wide_x_${length}_tile_long.png`;
     link.click();
   }).catch((error) => {
     console.error('Error capturing screenshot:', error);
